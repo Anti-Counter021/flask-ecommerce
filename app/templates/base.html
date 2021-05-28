@@ -29,9 +29,22 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 {% for category in categories %}
                                     {% if category.products.count() %}
-                                        <li><a class="dropdown-item" href="{{ url_for('main.category_detail', slug=category.slug) }}">{{ category.name }}</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('main.category_detail', slug=category.slug) }}">
+                                            {{ category.name }}
+                                            <span class="badge rounded-pill bg-secondary">{{ category.products.count() }}</span>
+                                        </a></li>
                                     {% endif %}
                                 {% endfor %}
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarAuth" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="">
+                                Register / login
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarAuth">
+                                <li>
+                                   <a href="{{ url_for('auth.login') }}" class="dropdown-item">Login</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -59,6 +72,13 @@
         {% endif %}
         <div class="container">
             <div class="row">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-info" role="alert">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                 {% block content %}
                     {% for product in products %}
                         {% include '_product.html' %}

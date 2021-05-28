@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 510ada83a2eb
+Revision ID: 804d6b15eb8b
 Revises: 
-Create Date: 2021-05-28 17:10:50.369744
+Create Date: 2021-05-28 19:35:46.593977
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '510ada83a2eb'
+revision = '804d6b15eb8b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,14 +26,23 @@ def upgrade():
     )
     op.create_index(op.f('ix_category_name'), 'category', ['name'], unique=False)
     op.create_index(op.f('ix_category_slug'), 'category', ['slug'], unique=True)
+    op.create_table('user',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('username', sa.String(length=64), nullable=True),
+    sa.Column('email', sa.String(length=128), nullable=True),
+    sa.Column('password_hash', sa.String(length=128), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_user_email'), 'user', ['email'], unique=True)
+    op.create_index(op.f('ix_user_username'), 'user', ['username'], unique=True)
     op.create_table('product',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=128), nullable=True),
     sa.Column('slug', sa.String(length=128), nullable=True),
     sa.Column('description', sa.String(length=1024), nullable=True),
     sa.Column('price', sa.Integer(), nullable=True),
-    sa.Column('category', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['category'], ['category.id'], ),
+    sa.Column('category_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['category_id'], ['category.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_product_price'), 'product', ['price'], unique=False)
@@ -48,6 +57,9 @@ def downgrade():
     op.drop_index(op.f('ix_product_slug'), table_name='product')
     op.drop_index(op.f('ix_product_price'), table_name='product')
     op.drop_table('product')
+    op.drop_index(op.f('ix_user_username'), table_name='user')
+    op.drop_index(op.f('ix_user_email'), table_name='user')
+    op.drop_table('user')
     op.drop_index(op.f('ix_category_slug'), table_name='category')
     op.drop_index(op.f('ix_category_name'), table_name='category')
     op.drop_table('category')
