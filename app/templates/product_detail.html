@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-md-12">
+        <h1 class="text-center">Product - {{ product.title }}</h1>
+        <div class="row mb-5 mt-5">
+            <div class="col-md-6">
+                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
+            </div>
+            <div class="col-md-6">
+                <p>{{ product.description }}</p>
+                <p>{{ product.price }} $</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
