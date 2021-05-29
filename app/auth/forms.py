@@ -12,7 +12,6 @@ from wtforms.validators import (
     DataRequired,
     Email,
     EqualTo,
-    Length
 )
 
 from app.models import User
@@ -67,3 +66,16 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(email=self.email.data).first()
             if user is not None:
                 raise ValidationError('Please use a different email.')
+
+
+class ResetPasswordRequestForm(FlaskForm):
+    """ Reset password request form """
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Request password reset')
+
+
+class ResetPasswordForm(FlaskForm):
+    """ Reset password form """
+    password = PasswordField('Password', validators=[DataRequired()])
+    password_repeat = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset password')

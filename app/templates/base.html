@@ -45,6 +45,7 @@
                                 {% if current_user.is_anonymous  %}
                                     <li><a href="{{ url_for('auth.register') }}" class="dropdown-item">Register</a></li>
                                     <li><a href="{{ url_for('auth.login') }}" class="dropdown-item">Login</a></li>
+                                    <li><a href="{{ url_for('auth.reset_password_request') }}" class="dropdown-item">Reset Password</a></li>
                                 {% else %}
                                     <li><a href="{{ url_for('auth.profile') }}" class="dropdown-item">Profile</a></li>
                                     <li><a href="{{ url_for('auth.edit_profile') }}" class="dropdown-item">Edit profile</a></li>
