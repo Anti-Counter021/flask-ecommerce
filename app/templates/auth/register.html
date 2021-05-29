@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="text-center">Login</h1>
+    <h1 class="text-center">Register</h1>
     <div class="col-md-3"></div>
     <div class="col-md-6">
-        <form action="{{ url_for('auth.login') }}" method="post" role="form" class="row">
+        <form action="{{ url_for('auth.register') }}" method="post" role="form" class="row">
             {{ form.hidden_tag() }}
             <div class="form-group required text-center">
                 <label>Username</label>
                 {{ form.username(class="form-control", placeholder='Enter username') }}
                 {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="form-group required text-center">
+                <label>Email</label>
+                {{ form.email(class="form-control", placeholder='Enter email') }}
+                {% for error in form.email.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
@@ -20,12 +27,16 @@
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>
-            <div class="checkbox mt-3 mb-3">
-                {{ form.remember_me }}
-                <label>Remember Me</label>
+            <div class="form-group required text-center mt-3">
+                <label>Repeat password</label>
+                {{ form.password_repeat(class="form-control", placeholder='Repeat password') }}
+                {% for error in form.password_repeat.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
             </div>
+            <br class="mt-5">
             {{ form.submit(class="btn btn-success btn-block") }}
-            <a href="{{ url_for('auth.register') }}" class="btn btn-danger btn-block mt-3 mb-5" role="button">Register</a>
+            <br class="mb-5">
         </form>
     </div>
 {% endblock %}

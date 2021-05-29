@@ -1,5 +1,5 @@
 from app import create_app, db
-from app.models import Category, Product
+from app.models import Category, Product, User
 
 app = create_app()
 
@@ -11,4 +11,4 @@ def categories():
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'Category': Category, 'Product': Product}
+    return {'db': db, 'Category': Category, 'Product': Product, 'User': User}

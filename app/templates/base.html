@@ -42,9 +42,12 @@
                                 Register / login
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarAuth">
-                                <li>
-                                   <a href="{{ url_for('auth.login') }}" class="dropdown-item">Login</a>
-                                </li>
+                                {% if current_user.is_anonymous  %}
+                                    <li><a href="{{ url_for('auth.register') }}" class="dropdown-item">Register</a></li>
+                                    <li><a href="{{ url_for('auth.login') }}" class="dropdown-item">Login</a></li>
+                                {% else %}
+                                    <li><a href="{{ url_for('auth.logout') }}" class="dropdown-item">Logout</a></li>
+                                {% endif %}
                             </ul>
                         </li>
                     </ul>
