@@ -7,7 +7,7 @@ from app.models import Cart
 def get_cart():
     """ Get cart """
     if current_user.is_authenticated:
-        cart_ = Cart.query.filter_by(user_id=current_user.id).first()
+        cart_ = Cart.query.filter_by(user_id=current_user.id, in_order=False).first()
         if not cart_:
             cart_ = Cart(user_id=current_user.id)
             db.session.add(cart_)

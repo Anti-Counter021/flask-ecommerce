@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import current_app
 from flask_login import UserMixin
 
@@ -44,6 +46,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     cart_product = db.relationship('CartProduct', backref='user', lazy='dynamic')
     cart_id = db.relationship('Cart', backref='owner', lazy='dynamic')
+    order = db.relationship('Order', backref='user', lazy='dynamic')
 
     def __init__(self, username, email):
         self.username = username
@@ -97,9 +100,26 @@ class Cart(db.Model):
     total_products = db.Column(db.Integer, default=0)
     final_price = db.Column(db.Integer, default=0)
     for_anonymous_user = db.Column(db.Boolean, default=False)
+    in_order = db.Column(db.Boolean, default=False)
+    order = db.relationship('Order', backref='cart', lazy='dynamic')
 
     def __repr__(self):
         return f'<Cart {self.id}>'
+
+
+class Order(db.Model):
+    """ Order """
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    first_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255))
+    phone = db.Column(db.String(20))
+    cart_id = db.Column(db.Integer, db.ForeignKey('cart.id'))
+    address = db.Column(db.String(255))
+    buying_type = db.Column(db.String(10))
+    comment = db.Column(db.String(1000))
+    created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    order_date = db.Column(db.Date, index=True, default=datetime.utcnow)
 
 
 @login.user_loader

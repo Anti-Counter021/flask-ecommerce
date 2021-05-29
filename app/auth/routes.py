@@ -12,7 +12,7 @@ from app.auth.forms import (
     ResetPasswordForm
 )
 from app import db
-from app.models import User
+from app.models import User, Order
 from app.auth.send_mail import send_password_reset_email
 
 
@@ -64,7 +64,7 @@ def register():
 @login_required
 def profile():
     """ Profile """
-    orders = [{'phone': 'phone'}, {'notebook': 'macbook'}]
+    orders = Order.query.filter_by(user=current_user)
     return render_template('auth/profile.html', title='Profile', orders=orders)
 
 

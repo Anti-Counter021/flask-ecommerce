@@ -34,12 +34,13 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     mail.init_app(app)
 
-    from app.models import Product, Category, User, CartProduct, Cart
+    from app.models import Product, Category, User, CartProduct, Cart, Order
     admin.add_view(ModelView(Product, db.session))
     admin.add_view(ModelView(Category, db.session))
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(CartProduct, db.session))
     admin.add_view(ModelView(Cart, db.session))
+    admin.add_view(ModelView(Order, db.session))
 
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')

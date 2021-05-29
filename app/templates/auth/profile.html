@@ -1,8 +1,99 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h3>Profile user {{ current_user.username }}</h3>
-    {% for order in orders %}
-        {{ order }}
-    {% endfor %}
+    <h3 class="text-center">Profile user {{ current_user.username }}</h3>
+    <h3 class="mt-3 mb-3 text-center">Orders</h3>
+    {% if not orders.count() %}
+        <h3 class="text-center">You have no orders yet</h3>
+    {% else %}
+        <table class="table mt-3 mb-3">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Sum</th>
+                <th scope="col">Title and quantity</th>
+                <th scope="col">Act</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <th scope="row">{{ order.id }}</th>
+                    <td>{{ order.cart.final_price }} $</td>
+                    <td>
+                        <ul>
+                            {% for item in order.cart.products.all() %}
+                                <li>{{ item.product.title }} x {{ item.qty }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal-{{ order.id }}">
+                            Additionally
+                        </button>
+                        <div class="modal fade" id="exampleModal-{{ order.id }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Order № {{ order.id }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Title</th>
+                                                    <th scope="col">Image</th>
+                                                    <th scope="col">Price</th>
+                                                    <th scope="col">Quantity</th>
+                                                    <th scope="col">Final price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in order.cart.products.all() %}
+                                                    <tr>
+                                                        <th scope="row">{{ item.product.title }}</th>
+                                                        <td class="w-25">
+                                                            {% if item.product.image_path %}
+                                                                <img src="{{ url_for('main.uploaded_image', slug=item.product.slug) }}" class="img-thumbnail" alt="..."/>
+                                                            {% else %}
+                                                                <img class="img-thumbnail" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td><strong>{{ item.product.price }} $</strong></td>
+                                                        <td>{{ item.qty }}</td>
+                                                        <td>{{ item.final_price }} $</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                <tr>
+                                                    <td colspan="2"></td>
+                                                    <td>Total:</td>
+                                                    <td>{{ order.cart.total_products }}</td>
+                                                    <td><strong>{{ order.cart.final_price }} $</strong></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <h4 class="text-center">Additional info</h4>
+                                        <p>Name: <strong>{{ order.first_name }}</strong></p>
+                                        <p>Surname: <strong>{{ order.last_name }}</strong></p>
+                                        <p>Phone: <strong>{{ order.phone }}</strong></p>
+                                        <p>Address: <strong>{{ order.address }}</strong></p>
+                                        <p>Buying type: <strong>{{ order.buying_type }}</strong></p>
+                                        <p>
+                                            As the desired delivery date for the order, the selected:
+                                            {{ order.order_date }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}
