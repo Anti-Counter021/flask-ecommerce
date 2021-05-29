@@ -18,7 +18,13 @@
                 {% for item in cart.products.all() %}
                     <tr>
                         <th scope="row">{{ item.product.title }}</th>
-                        <td class="w-25"><img alt="" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-fluid"></td>
+                        <td class="w-25">
+                            {% if item.product.image_path %}
+                                <img class="img-fluid" src="{{ url_for('main.uploaded_image', slug=item.product.slug) }}" alt="">
+                            {% else %}
+                                <img alt="" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-fluid">
+                            {% endif %}
+                        </td>
                         <td>Price: {{ item.product.price }} $</td>
                         <td>
                             <form action="{{ url_for('main.change_qty', slug=item.product.slug) }}" method="POST">

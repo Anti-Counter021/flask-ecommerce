@@ -1,5 +1,7 @@
-from flask import render_template, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, request, flash, current_app, send_from_directory
 from flask_login import current_user, login_required
+
+import os
 
 from app import db
 from app.models import Category, Product, Cart, CartProduct
@@ -78,3 +80,24 @@ def delete_from_cart(slug):
     recalculate_cart(cart)
     flash('Product deleted from cart.')
     return redirect(url_for('main.cart'))
+
+
+@bp.route('/image/<slug>', methods=['GET', 'POST'])
+def upload_image(slug):
+    """ Upload Image for product """
+    product = Product.query.filter_by(slug=slug).first()
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            filename = f'{product.slug}.png'
+            file.save(os.path.join(current_app.config['IMAGE_PATH'], filename))
+            product.image_path = os.path.join(current_app.config['IMAGE_PATH'], filename)
+            db.session.commit()
+            return redirect(url_for('main.product_detail', product_slug=slug, category_slug=product.category.slug))
+    return render_template('upload_image.html')
+
+
+@bp.route('/images/<slug>')
+def uploaded_image(slug):
+    """ Uploaded image """
+    return send_from_directory(current_app.config['IMAGE_PATH'], f'{slug}.png')

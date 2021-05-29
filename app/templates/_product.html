@@ -1,7 +1,11 @@
 <div class="col-md-3 mb-5">
     <div class="card h-100">
         <!-- Product image-->
-        <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
+        {% if product.image_path %}
+            <img src="{{ url_for('main.uploaded_image', slug=product.slug) }}" class="img-thumbnail" alt="..."/>
+        {% else %}
+            <img class="img-thumbnail" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
+        {% endif %}
         <!-- Product details-->
         <div class="card-body p-4">
             <div class="text-center">

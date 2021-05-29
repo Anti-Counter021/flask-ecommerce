@@ -1,0 +1,4 @@
+<form action="{{ url_for('main.upload_image', slug=product.slug) }}" method="post" enctype="multipart/form-data">
+    <h3><input class="btn btn-default" type="file" name="file"></h3>
+    <h3><input class="btn btn-primary mt-3" type="submit" value="Upload"></h3>
+</form>

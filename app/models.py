@@ -23,6 +23,7 @@ class Product(db.Model):
     slug = db.Column(db.String(128), index=True, unique=True)
     description = db.Column(db.String(1024))
     price = db.Column(db.Integer, index=True, default=0)
+    image_path = db.Column(db.String(350))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     cart_product_id = db.relationship('CartProduct', backref='product', lazy='dynamic')
 
