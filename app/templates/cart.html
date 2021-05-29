@@ -20,11 +20,23 @@
                         <th scope="row">{{ item.product.title }}</th>
                         <td class="w-25"><img alt="" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-fluid"></td>
                         <td>Price: {{ item.product.price }} $</td>
-                        <td>{{ item.qty }}</td>
-                        <td>{{ item.final_price }}</td>
+                        <td>
+                            <form action="{{ url_for('main.change_qty', slug=item.product.slug) }}" method="POST">
+                                <input type="number" value="{{ item.qty }}" name="qty" id="qty" min="1">
+                                <input type="submit" value="Изменить количество" class="btn btn-primary">
+                            </form>
+                        </td>
+                        <td>{{ item.final_price }} $</td>
                         <td>Delete</td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <td colspan="2"></td>
+                    <td>Total:</td>
+                    <td>{{ cart.total_products }}</td>
+                    <td><strong>{{ cart.final_price }} $</strong></td>
+                    <td>Order</td>
+                </tr>
             </tbody>
         </table>
     {% endif %}
