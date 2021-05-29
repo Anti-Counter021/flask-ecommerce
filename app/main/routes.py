@@ -46,7 +46,6 @@ def add_to_cart(slug):
         cart_product.final_price = product.price
         db.session.add(cart_product)
         cart.products.append(cart_product)
-        db.session.commit()
     recalculate_cart(cart)
     flash('Product added.')
     return redirect(url_for('main.cart'))
@@ -55,14 +54,27 @@ def add_to_cart(slug):
 @bp.route('/cart/change-qty/<slug>', methods=['GET', 'POST'])
 @login_required
 def change_qty(slug):
-    """ Change quantity """
+    """ Change quantity in cart """
     cart = get_cart()
     product = Product.query.filter_by(slug=slug).first()
     cart_product = CartProduct.query.filter_by(user=current_user, cart=cart, product=product).first()
     qty = int(request.form['qty'])
     cart_product.qty = qty
     cart_product.final_price = product.price * qty
-    db.session.commit()
     recalculate_cart(cart)
     flash('Quantity from product changed.')
+    return redirect(url_for('main.cart'))
+
+
+@bp.route('/cart/delete/<slug>')
+@login_required
+def delete_from_cart(slug):
+    """ Delete from cart """
+    product = Product.query.filter_by(slug=slug).first()
+    cart = get_cart()
+    cart_product = CartProduct.query.filter_by(user=current_user, cart=cart, product=product).first()
+    cart.products.remove(cart_product)
+    db.session.delete(cart_product)
+    recalculate_cart(cart)
+    flash('Product deleted from cart.')
     return redirect(url_for('main.cart'))

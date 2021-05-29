@@ -27,7 +27,7 @@
                             </form>
                         </td>
                         <td>{{ item.final_price }} $</td>
-                        <td>Delete</td>
+                        <td><a class="btn btn-danger" href="{{ url_for('main.delete_from_cart', slug=item.product.slug) }}">Delete</a></td>
                     </tr>
                 {% endfor %}
                 <tr>

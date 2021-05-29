@@ -5,7 +5,7 @@ from app.models import Cart
 
 
 def get_cart():
-
+    """ Get cart """
     if current_user.is_authenticated:
         cart_ = Cart.query.filter_by(user_id=current_user.id).first()
         if not cart_:
@@ -22,7 +22,7 @@ def get_cart():
 
 
 def recalculate_cart(cart):
-
+    """ Recalculate count and price product in cart """
     cart_count = cart.products.count()
     cart_sum = 0
     for item in cart.products.all():
