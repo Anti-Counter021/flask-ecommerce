@@ -27,10 +27,12 @@ def create_app(config_class=Config):
     admin.init_app(app)
     bootstrap.init_app(app)
 
-    from app.models import Product, Category, User
+    from app.models import Product, Category, User, CartProduct, Cart
     admin.add_view(ModelView(Product, db.session))
     admin.add_view(ModelView(Category, db.session))
     admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(CartProduct, db.session))
+    admin.add_view(ModelView(Cart, db.session))
 
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
