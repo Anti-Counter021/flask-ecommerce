@@ -21,3 +21,8 @@ def category_detail(slug):
 def product_detail(category_slug, product_slug):
     product = Product.query.filter_by(slug=product_slug).first()
     return render_template('product_detail.html', product=product, title=f'Product - {product.title}')
+
+
+@bp.route('/cart')
+def cart():
+    return render_template('cart.html', title='Cart')

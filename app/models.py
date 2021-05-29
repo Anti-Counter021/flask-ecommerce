@@ -71,7 +71,7 @@ class CartProduct(db.Model):
 class Cart(db.Model):
     """ Cart """
     id = db.Column(db.Integer, primary_key=True)
-    products_id = db.relationship('CartProduct', backref='cart', lazy='dynamic')
+    products = db.relationship('CartProduct', backref='cart', lazy='dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     total_products = db.Column(db.Integer, default=0)
     final_price = db.Column(db.Integer, default=0)

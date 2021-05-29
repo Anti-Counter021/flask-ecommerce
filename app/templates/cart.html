@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="text-center">Your cart {% if not cart.total_products %}is empty{% endif %}</h1>
+    {% if cart.total_products %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Final price</th>
+                    <th scope="col">Act</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.products.all() %}
+                    <tr>
+                        <th scope="row">{{ item.product.title }}</th>
+                        <td class="w-25"><img alt="" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-fluid"></td>
+                        <td>Price: {{ item.product.price }} $</td>
+                        <td>{{ item.qty }}</td>
+                        <td>{{ item.final_price }}</td>
+                        <td>Delete</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
