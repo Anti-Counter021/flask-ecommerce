@@ -75,6 +75,7 @@ class Cart(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     total_products = db.Column(db.Integer, default=0)
     final_price = db.Column(db.Integer, default=0)
+    for_anonymous_user = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f'<Cart {self.id}>'
