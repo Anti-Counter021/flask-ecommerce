@@ -46,6 +46,8 @@
                                     <li><a href="{{ url_for('auth.register') }}" class="dropdown-item">Register</a></li>
                                     <li><a href="{{ url_for('auth.login') }}" class="dropdown-item">Login</a></li>
                                 {% else %}
+                                    <li><a href="{{ url_for('auth.profile') }}" class="dropdown-item">Profile</a></li>
+                                    <li><a href="{{ url_for('auth.edit_profile') }}" class="dropdown-item">Edit profile</a></li>
                                     <li><a href="{{ url_for('auth.logout') }}" class="dropdown-item">Logout</a></li>
                                 {% endif %}
                             </ul>
