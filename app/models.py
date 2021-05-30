@@ -91,7 +91,7 @@ class CartProduct(db.Model):
     final_price = db.Column(db.Integer, default=0)
 
     def __repr__(self):
-        return f'<CartProduct {self.id}>'
+        return f'<CartProduct {self.id} - {self.product.title} - {self.user.username}>'
 
 
 class Cart(db.Model):
@@ -106,7 +106,7 @@ class Cart(db.Model):
     order = db.relationship('Order', backref='cart', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Cart {self.id}>'
+        return f'<Cart {self.id} - {self.owner}>'
 
 
 class Order(db.Model):
@@ -124,7 +124,7 @@ class Order(db.Model):
     order_date = db.Column(db.Date, index=True, default=datetime.utcnow)
 
     def __repr__(self):
-        return f'<Order {self.id}>'
+        return f'<Order {self.id} - cart {self.cart.id} - {self.user.username}>'
 
 
 class CategoryFeature(db.Model):
@@ -136,7 +136,7 @@ class CategoryFeature(db.Model):
     feature_products = db.relationship('ProductFeature', backref='feature', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Feature {self.id}>'
+        return f'<Feature {self.feature_name} {self.unit} - {self.category.name}>'
 
 
 class ProductFeature(db.Model):
@@ -147,7 +147,7 @@ class ProductFeature(db.Model):
     value = db.Column(db.String(255))
 
     def __repr__(self):
-        return f'<Feature {self.id}>'
+        return f'<Feature {self.feature.feature_name} {self.value} {self.feature.unit} - {self.product.title}>'
 
 
 @login.user_loader
