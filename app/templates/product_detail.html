@@ -29,7 +29,7 @@
                         {{ feature.feature.feature_name }}
                     </div>
                     <div class="col border border-dark">
-                        {{ feature.value }} {{ feature.feature.unit }}
+                        {{ feature.value }} {% if feature.feature.unit %}{{ feature.feature.unit }}{% endif %}
                     </div>
                 </div>
             {% endfor %}
