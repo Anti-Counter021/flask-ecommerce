@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="text-center mt-3">API</h1>
+    <div class="row text-center">
+        <div class="col"><a href="{{ url_for('api.get_categories') }}">Categories</a></div>
+        <div class="col"><a href="{{ url_for('api.get_all_products') }}">Products</a></div>
+    </div>
+
+    <p></p><p></p><p></p>
+    <h1 class="text-center">Categories</h1>
+    <div class="row text-center h4">
+        <div class="col">Category detail</div>
+        <div class="col">Products in category</div>
+    </div>
+    {% for category in categories %}
+        <div class="row text-center">
+            <div class="col mb-3">
+                <a href="{{ url_for('api.get_category', slug=category.slug) }}">{{ category.name }}</a>
+            </div>
+            <div class="col">
+                <a href="{{ url_for('api.get_products_for_category', slug=category.slug) }}">{{ category.name }}</a>
+            </div>
+        </div>
+    {% endfor %}
+
+    <p></p><p></p><p></p>
+    <div class="row pb-5 mb-5">
+        <h1 class="text-center">Products</h1>
+        {% for product in products %}
+            <div class="col text-center">
+                <a href="{{ url_for('api.get_product', slug=product.slug, category_slug=product.category.slug) }}">{{ product.title }}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
