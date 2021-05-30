@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import current_app
+from flask import current_app, url_for
 from flask_login import UserMixin
 
 import jwt
@@ -12,7 +12,30 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
 
 
-class Category(db.Model):
+class PaginatedAPIMixin(object):
+    """ Pagination mixin for API """
+    @staticmethod
+    def to_collection_dict(query, page, per_page, endpoint, **kwargs):
+        """ Api collections """
+        resources = query.paginate(page, per_page, False)
+        data = {
+            'items': [item.to_dict() for item in resources.items],
+            '_meta': {
+                'page': page,
+                'per_page': per_page,
+                'total_pages': resources.pages,
+                'total_items': resources.total
+            },
+            '_links': {
+                'self': url_for(endpoint, page=page, per_page=per_page, **kwargs),
+                'next': url_for(endpoint, page=page + 1, per_page=per_page, **kwargs) if resources.has_next else None,
+                'prev': url_for(endpoint, page=page - 1, per_page=per_page, **kwargs) if resources.has_prev else None
+            }
+        }
+        return data
+
+
+class Category(PaginatedAPIMixin, db.Model):
     """ Category """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True)
@@ -23,8 +46,23 @@ class Category(db.Model):
     def __repr__(self):
         return f'<Category {self.name}>'
 
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'slug': self.slug,
+            'products_count': self.products.count(),
+            'feature_count': self.feature.count(),
+            'features': [{'name': item.feature_name, 'unit': item.unit} for item in self.feature],
+            '_links': {
+                'self': url_for('api.get_category', slug=self.slug),
+                'products': url_for('api.get_products_for_category', slug=self.slug)
+            }
+        }
+        return data
 
-class Product(db.Model):
+
+class Product(PaginatedAPIMixin, db.Model):
     """ Product """
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), index=True)
@@ -35,6 +73,24 @@ class Product(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     cart_product_id = db.relationship('CartProduct', backref='product', lazy='dynamic')
     feature_id = db.relationship('ProductFeature', backref='product', lazy='dynamic')
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'title': self.title,
+            'slug': self.slug,
+            'description': self.description,
+            'price': self.price,
+            'image': self.image_path,
+            'category': self.category.name,
+            'features_count': self.feature_id.count(),
+            'features': [{'name': item.feature.feature_name, 'value': item.value, 'unit': item.feature.unit} for item in self.feature_id],
+            '_links': {
+                'self': url_for('api.get_product', slug=self.slug, category_slug=self.category.slug),
+                'category': url_for('api.get_category', slug=self.category.slug)
+            }
+        }
+        return data
 
     def __repr__(self):
         return f'<Product {self.title}>'
@@ -92,7 +148,7 @@ class CartProduct(db.Model):
     final_price = db.Column(db.Integer, default=0)
 
     def __repr__(self):
-        return f'<CartProduct {self.id} - {self.product.title} - {self.user.username}>'
+        return f'<CartProduct {self.id} - {self.product.title} - {self.user}>'
 
 
 class Cart(db.Model):
