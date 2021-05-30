@@ -49,6 +49,7 @@ class User(UserMixin, db.Model):
     cart_product = db.relationship('CartProduct', backref='user', lazy='dynamic')
     cart_id = db.relationship('Cart', backref='owner', lazy='dynamic')
     order = db.relationship('Order', backref='user', lazy='dynamic')
+    testimonial = db.relationship('Testimonial', backref='user', lazy='dynamic')
 
     def __init__(self, username, email):
         self.username = username
@@ -148,6 +149,15 @@ class ProductFeature(db.Model):
 
     def __repr__(self):
         return f'<Feature {self.feature.feature_name} {self.value} {self.feature.unit} - {self.product.title}>'
+
+
+class Testimonial(db.Model):
+    """ Testimonial """
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    appraisal = db.Column(db.String, default='excellent', index=True)
+    comment = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
 
 @login.user_loader

@@ -29,3 +29,13 @@ class OrderForm(FlaskForm):
         today = date.today()
         if order_date.data < today:
             raise ValidationError('Please use correct date.')
+
+
+class TestimonialForm(FlaskForm):
+    """ Testimonial """
+    APPRAISAL_CHOICES = [
+        ('very bad', 'very bad'), ('bad', 'bad'), ('normal', 'normal'), ('good', 'good'), ('excellent', 'excellent')
+    ]
+    appraisal = SelectField('Appraisal', validators=[DataRequired()], choices=APPRAISAL_CHOICES)
+    comment = StringField('Comment')
+    submit = SubmitField('Create testimonial')

@@ -6,10 +6,10 @@ from flask_login import current_user, login_required
 import os
 
 from app import db
-from app.models import Category, Product, Cart, CartProduct, Order
+from app.models import Category, Product, CartProduct, Order, Testimonial
 from app.cart_search import get_cart, recalculate_cart
 from app.main import bp
-from app.main.forms import OrderForm
+from app.main.forms import OrderForm, TestimonialForm
 from app.main.send_mail import send_admin_about_order
 
 
@@ -128,3 +128,17 @@ def make_order():
     elif request.method == 'GET':
         form.order_date.data = date.today()
     return render_template('order.html', title='Order', form=form, cart=cart)
+
+
+@bp.route('/testimonials', methods=['GET', 'POST'])
+def testimonials():
+    """ Testimonials """
+    form = TestimonialForm()
+    if form.validate_on_submit():
+        testimonial = Testimonial(user=current_user, appraisal=form.appraisal.data, comment=form.comment.data)
+        db.session.add(testimonial)
+        db.session.commit()
+        flash('Your testimonial has been created.')
+        return redirect(url_for('main.testimonials'))
+    testimonials_ = Testimonial.query.all()
+    return render_template('testimonial.html', title='Testimonials', form=form, testimonials=testimonials_)

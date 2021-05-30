@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="text-center mb-3">Testimonials</h1>
+    <div class="row mb-3">
+        <button class="btn btn-primary mb-3 btn-block" data-bs-toggle="modal" data-bs-target="#testimonialModal">
+            Add testimonial
+        </button>
+        <div class="col">
+            {% for testimonial in testimonials %}
+                <ul class="list-group text-center mb-3">
+                    <li class="list-group-item">{{ testimonial.user.username }}</li>
+                    <li class="list-group-item">Appraisal: <strong>{{ testimonial.appraisal.upper() }}</strong></li>
+                    {% if testimonial.comment %}<li class="list-group-item">Comment: {{ testimonial.comment }}</li>{% endif %}
+                </ul>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="modal fade" id="testimonialModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add testimonial</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('main.testimonials') }}" method="post" role="form" class="row">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group text-center mb-3">
+                            <label>Appraisal</label>
+                            {{ form.appraisal(class="form-control") }}
+                            {% for error in form.appraisal.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group text-center mb-3">
+                            <label>Comment</label>
+                            {{ form.comment(class='form-control') }}
+                            {% for error in form.comment.errors %}
+                                <span style="color: red;">[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+                        {{ form.submit(class="btn btn-success btn-block") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
