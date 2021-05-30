@@ -18,6 +18,7 @@ class Category(db.Model):
     name = db.Column(db.String(64), index=True)
     slug = db.Column(db.String(128), index=True, unique=True)
     products = db.relationship('Product', backref='category', lazy='dynamic')
+    feature = db.relationship('CategoryFeature', backref='category', lazy='dynamic')
 
     def __repr__(self):
         return f'<Category {self.name}>'
@@ -33,6 +34,7 @@ class Product(db.Model):
     image_path = db.Column(db.String(350))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     cart_product_id = db.relationship('CartProduct', backref='product', lazy='dynamic')
+    feature_id = db.relationship('ProductFeature', backref='product', lazy='dynamic')
 
     def __repr__(self):
         return f'<Product {self.title}>'
@@ -120,6 +122,32 @@ class Order(db.Model):
     comment = db.Column(db.String(1000))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     order_date = db.Column(db.Date, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Order {self.id}>'
+
+
+class CategoryFeature(db.Model):
+    """ Category Feature """
+    id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    feature_name = db.Column(db.String(255))
+    unit = db.Column(db.String(50))
+    feature_products = db.relationship('ProductFeature', backref='feature', lazy='dynamic')
+
+    def __repr__(self):
+        return f'<Feature {self.id}>'
+
+
+class ProductFeature(db.Model):
+    """ Product Feature """
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    feature_id = db.Column(db.Integer, db.ForeignKey('category_feature.id'))
+    value = db.Column(db.String(255))
+
+    def __repr__(self):
+        return f'<Feature {self.id}>'
 
 
 @login.user_loader

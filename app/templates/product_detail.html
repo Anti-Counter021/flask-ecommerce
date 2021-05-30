@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="col-md-12">
+    <div class="row">
         <h1 class="text-center">Product - {{ product.title }}</h1>
         <div class="row mb-5 mt-5">
             <div class="col-md-6">
@@ -18,5 +18,20 @@
                 <p class="text-center"><a href="{{ url_for('main.add_to_cart', slug=product.slug) }}"><button class="btn btn-primary">Add to cart</button></a></p>
             </div>
         </div>
+    </div>
+    <div class="container text-center mb-5">
+        {% if product.feature_id.count() %}
+            <p class="h4">Features:</p>
+            {% for feature in product.feature_id.all() %}
+                <div class="row">
+                    <div class="col border border-dark">
+                        {{ feature.feature.feature_name }}
+                    </div>
+                    <div class="col border border-dark">
+                        {{ feature.value }} {{ feature.feature.unit }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}
