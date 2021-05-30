@@ -13,8 +13,9 @@
                 {% endif %}
             </div>
             <div class="col-md-6">
+                <p>Description:</p>
                 <p>{{ product.description }}</p>
-                <p>{{ product.price }} $</p>
+                <p>Price: <strong>{{ product.price }}</strong> $</p>
                 <p class="text-center"><a href="{{ url_for('main.add_to_cart', slug=product.slug) }}"><button class="btn btn-primary">Add to cart</button></a></p>
             </div>
         </div>
