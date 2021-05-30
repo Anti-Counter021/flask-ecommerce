@@ -29,7 +29,7 @@
                         <td>
                             <form action="{{ url_for('main.change_qty', slug=item.product.slug) }}" method="POST">
                                 <input type="number" value="{{ item.qty }}" name="qty" id="qty" min="1">
-                                <input type="submit" value="Изменить количество" class="btn btn-primary">
+                                <input type="submit" value="Change quantity" class="btn btn-primary">
                             </form>
                         </td>
                         <td>{{ item.final_price }} $</td>
@@ -41,7 +41,7 @@
                     <td>Total:</td>
                     <td>{{ cart.total_products }}</td>
                     <td><strong>{{ cart.final_price }} $</strong></td>
-                    <td>Order</td>
+                    <td><a class="btn btn-primary" href="{{ url_for('main.make_order') }}">Make order</a></td>
                 </tr>
             </tbody>
         </table>

@@ -1,0 +1,17 @@
+{{ order.first_name }} {{ order.last_name }}
+
+Phone: {{ order.phone }}
+
+Products:
+    {% for item in order.cart.products.all() %}
+        {{ item.product.title }} x {{ item.qty }} items
+    {% endfor %}
+
+Final price:
+    {{ order.cart.final_price }} $
+
+{% if order.buying_type != 'self' %}Please deliver to the address: {{ order.address }}{% else %}I will pick it up myself{% endif %}
+
+I chose as the desired date of receipt: {{ order.order_date.strftime('%d-%m-%Y') }}{% if order.comment %}
+Comment on the order:
+{{ order.comment }}{% endif %}

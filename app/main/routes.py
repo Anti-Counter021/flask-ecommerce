@@ -1,12 +1,16 @@
+from datetime import date
+
 from flask import render_template, redirect, url_for, request, flash, current_app, send_from_directory
 from flask_login import current_user, login_required
 
 import os
 
 from app import db
-from app.models import Category, Product, Cart, CartProduct
+from app.models import Category, Product, Cart, CartProduct, Order
 from app.cart_search import get_cart, recalculate_cart
 from app.main import bp
+from app.main.forms import OrderForm
+from app.main.send_mail import send_admin_about_order
 
 
 @bp.route('/')
@@ -101,3 +105,26 @@ def upload_image(slug):
 def uploaded_image(slug):
     """ Uploaded image """
     return send_from_directory(current_app.config['IMAGE_PATH'], f'{slug}.png')
+
+
+@bp.route('/make-order', methods=['GET', 'POST'])
+def make_order():
+    """ Make order """
+    form = OrderForm()
+    cart = get_cart()
+    if form.validate_on_submit():
+        order = Order(
+            user=current_user, first_name=form.first_name.data, last_name=form.last_name.data, phone=form.phone.data,
+            cart=cart, address=form.address.data, buying_type=form.buying_type.data, comment=form.comment.data,
+            order_date=form.order_date.data
+        )
+        cart.in_order = True
+        current_user.order.append(order)
+        db.session.add(order)
+        db.session.commit()
+        send_admin_about_order(order)
+        flash('Your order has been created.')
+        return redirect(url_for('auth.profile'))
+    elif request.method == 'GET':
+        form.order_date.data = date.today()
+    return render_template('order.html', title='Order', form=form, cart=cart)

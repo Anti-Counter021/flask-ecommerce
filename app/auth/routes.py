@@ -64,7 +64,7 @@ def register():
 @login_required
 def profile():
     """ Profile """
-    orders = Order.query.filter_by(user=current_user)
+    orders = Order.query.filter_by(user=current_user).order_by(Order.created_at.desc())
     return render_template('auth/profile.html', title='Profile', orders=orders)
 
 

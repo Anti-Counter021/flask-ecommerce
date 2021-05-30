@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3 class="text-center">Make Order</h3>
+    <div class="container text-center pb-5 mb-5">
+        <div class="row h3 mb-3  border-bottom">
+            <div class="col-md">
+                Name
+            </div>
+            <div class="col-md">
+                Image
+            </div>
+            <div class="col-md">
+                Price
+            </div>
+            <div class="col-md">
+                Quantity
+            </div>
+            <div class="col-md">
+                Final price
+            </div>
+        </div>
+        {% for item in cart.products.all() %}
+            <div class="row mt-3 border-bottom">
+                <div class="col-md">
+                    {{ item.product.title }}
+                </div>
+                <div class="col-md">
+                    {% if item.product.image_path %}
+                        <img src="{{ url_for('main.uploaded_image', slug=item.product.slug) }}" class="img-thumbnail"
+                             alt="..."/>
+                    {% else %}
+                        <img class="img-thumbnail" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
+                    {% endif %}
+                </div>
+                <div class="col-md">
+                    {{ item.product.price }} $
+                </div>
+                <div class="col-md">
+                    {{ item.qty }}
+                </div>
+                <div class="col-md">
+                    {{ item.final_price }} $
+                </div>
+            </div>
+        {% endfor %}
+        <div class="row">
+            <div class="col-md"></div>
+            <div class="col-md"></div>
+            <div class="col-md">
+                Total:
+            </div>
+            <div class="col-md">
+                {{ cart.total_products }}
+            </div>
+            <div class="col-md">
+                {{ cart.final_price }} $
+            </div>
+        </div>
+    </div>
+    <br>
+    <h3 class="text-center">Order form</h3>
+    <form action="{{ url_for('main.make_order') }}" method="post" role="form" class="row">
+        {{ form.hidden_tag() }}
+        <div class="form-group required text-center mb-3">
+            <label>Name</label>
+            {{ form.first_name(class='form-control', placeholder='Enter name') }}
+            {% for error in form.first_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group required text-center mb-3">
+            <label>Surname</label>
+            {{ form.last_name(class='form-control', placeholder='Enter surname') }}
+            {% for error in form.last_name.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group required text-center mb-3">
+            <label>Phone</label>
+            {{ form.phone(class='form-control', placeholder='Enter phone') }}
+            {% for error in form.phone.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group required text-center mb-3">
+            <label>Address</label>
+            {{ form.address(class='form-control', placeholder='Enter address') }}
+            {% for error in form.address.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group required text-center mb-3">
+            <label>Buying type</label>
+            {{ form.buying_type(class='form-control', placeholder='Enter buying type') }}
+            {% for error in form.buying_type.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group required text-center mb-3">
+            <label>Comment</label>
+            {{ form.comment(class='form-control', placeholder='Enter comment') }}
+            {% for error in form.comment.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group required text-center mb-3">
+            <label>Order date</label>
+            {{ form.order_date(class='form-control', placeholder='Enter order date') }}
+            {% for error in form.order_date.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        {{ form.submit(class="btn btn-success btn-block mb-3") }}
+    </form>
+{% endblock %}

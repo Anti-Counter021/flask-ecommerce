@@ -84,7 +84,7 @@
                                         <p>Buying type: <strong>{{ order.buying_type }}</strong></p>
                                         <p>
                                             As the desired delivery date for the order, the selected:
-                                            {{ order.order_date }}
+                                            {{ order.order_date.strftime('%d-%m-%Y') }}
                                         </p>
                                     </div>
                                 </div>

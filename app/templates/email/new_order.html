@@ -1,0 +1,18 @@
+<p>{{ order.first_name }} {{ order.last_name }}</p>
+
+<p>Phone: {{ order.phone }}</p>
+
+<p>Products:</p>
+    {% for item in order.cart.products.all() %}
+        <p>{{ item.product.title }} x {{ item.qty }} items</p>
+    {% endfor %}
+
+<p>Final price:  {{ order.cart.final_price }} $</p>
+
+<p>{% if order.buying_type != 'self' %}Please deliver to the address: {{ order.address }}{% else %}I will pick it up myself{% endif %}</p>
+
+<p>I chose as the desired date of receipt: {{ order.order_date.strftime('%d-%m-%Y') }}</p>
+{% if order.comment %}
+    <p>Comment on the order:</p>
+    <p>{{ order.comment }}</p>
+{% endif %}
