@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -34,16 +33,7 @@ def create_app(config_class=Config):
     bootstrap.init_app(app)
     mail.init_app(app)
 
-    from app.models import Product, Category, User, CartProduct, Cart, Order, CategoryFeature, ProductFeature, Testimonial
-    admin.add_view(ModelView(Product, db.session))
-    admin.add_view(ModelView(Category, db.session))
-    admin.add_view(ModelView(User, db.session))
-    admin.add_view(ModelView(CartProduct, db.session))
-    admin.add_view(ModelView(Cart, db.session))
-    admin.add_view(ModelView(Order, db.session))
-    admin.add_view(ModelView(CategoryFeature, db.session))
-    admin.add_view(ModelView(ProductFeature, db.session))
-    admin.add_view(ModelView(Testimonial, db.session))
+    from app import admin_routes
 
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')

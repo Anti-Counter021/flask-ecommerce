@@ -97,8 +97,7 @@ def upload_image(slug):
             file.save(os.path.join(current_app.config['IMAGE_PATH'], filename))
             product.image_path = os.path.join(current_app.config['IMAGE_PATH'], filename)
             db.session.commit()
-            return redirect(url_for('main.product_detail', product_slug=slug, category_slug=product.category.slug))
-    return render_template('upload_image.html')
+    return redirect(f'/admin/{Product.__tablename__}/edit?id={product.id}')
 
 
 @bp.route('/images/<slug>')

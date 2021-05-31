@@ -44,7 +44,7 @@ class Category(PaginatedAPIMixin, db.Model):
     feature = db.relationship('CategoryFeature', backref='category', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Category {self.name}>'
+        return f'{self.name}'
 
     def to_dict(self):
         data = {
@@ -93,7 +93,7 @@ class Product(PaginatedAPIMixin, db.Model):
         return data
 
     def __repr__(self):
-        return f'<Product {self.title}>'
+        return f'{self.title}'
 
 
 class User(UserMixin, db.Model):
@@ -112,7 +112,7 @@ class User(UserMixin, db.Model):
         self.email = email
 
     def __repr__(self):
-        return f'<User {self.username}>'
+        return f'{self.username}'
 
     def set_password(self, password):
         """ Set password """
@@ -148,7 +148,7 @@ class CartProduct(db.Model):
     final_price = db.Column(db.Integer, default=0)
 
     def __repr__(self):
-        return f'<CartProduct {self.id} - {self.product.title} - {self.user}>'
+        return f'ID: {self.id} - {self.product} - {self.user}'
 
 
 class Cart(db.Model):
@@ -163,7 +163,7 @@ class Cart(db.Model):
     order = db.relationship('Order', backref='cart', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Cart {self.id} - {self.owner}>'
+        return f'Cart ID: {self.id} - {self.owner}'
 
 
 class Order(db.Model):
@@ -181,7 +181,7 @@ class Order(db.Model):
     order_date = db.Column(db.Date, index=True, default=datetime.utcnow)
 
     def __repr__(self):
-        return f'<Order {self.id} - cart {self.cart.id} - {self.user.username}>'
+        return f'Order ID: {self.id} - cart ID: {self.cart.id} - {self.user}'
 
 
 class CategoryFeature(db.Model):
@@ -193,7 +193,7 @@ class CategoryFeature(db.Model):
     feature_products = db.relationship('ProductFeature', backref='feature', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Feature {self.feature_name} {self.unit} - {self.category.name}>'
+        return f'{self.feature_name} {"in " + str(self.unit) if self.unit else ""} - {self.category.name}'
 
 
 class ProductFeature(db.Model):
@@ -204,7 +204,7 @@ class ProductFeature(db.Model):
     value = db.Column(db.String(255))
 
     def __repr__(self):
-        return f'<Feature {self.feature.feature_name} {self.value} {self.feature.unit} - {self.product.title}>'
+        return f'{self.feature.feature_name} {self.value} {self.feature.unit} - {self.product}'
 
 
 class Testimonial(db.Model):
@@ -214,6 +214,9 @@ class Testimonial(db.Model):
     appraisal = db.Column(db.String, default='excellent', index=True)
     comment = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'ID: {self.id} - {self.user}'
 
 
 @login.user_loader
