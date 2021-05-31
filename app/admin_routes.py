@@ -1,6 +1,7 @@
 from datetime import date, datetime
 
 from flask_admin.contrib.sqla import ModelView
+from flask_login import current_user
 
 from wtforms.validators import DataRequired, Email
 
@@ -18,8 +19,8 @@ def date_format(view, value):
 class UserAdmin(ModelView):
     """ User admin editor """
     can_delete = False
-    column_list = ('id', 'username', 'email')
-    column_sortable_list = ('id', 'username', 'email')
+    column_list = ('id', 'username', 'email', 'permission')
+    column_sortable_list = ('id', 'username', 'email', 'permission')
     column_searchable_list = ('username', 'email')
     column_labels = {
         'cart_product': 'Cart products',
@@ -27,13 +28,23 @@ class UserAdmin(ModelView):
         'order': 'Orders',
         'testimonial': 'Testimonials'
     }
-    form_columns = ('username', 'email', 'cart_product', 'cart_id', 'order', 'testimonial', 'password_hash')
+    form_columns = ('username', 'email', 'cart_product', 'cart_id', 'order', 'testimonial',
+                    'password_hash', 'permission')
+    form_choices = {
+        'permission': [
+            ('user', 'user'),
+            ('admin', 'admin'),
+        ]
+    }
     form_args = {
         'username': {
             'validators': [DataRequired()]
         },
         'email': {
             'validators': [DataRequired(), Email()]
+        },
+        'permission': {
+            'validators': [DataRequired()]
         }
     }
     form_widget_args = {
@@ -54,6 +65,9 @@ class UserAdmin(ModelView):
         }
     }
 
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
+
 
 class CategoryAdmin(ModelView):
     """ Category admin editor """
@@ -71,6 +85,9 @@ class CategoryAdmin(ModelView):
             'validators': [DataRequired()]
         }
     }
+
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
 
 
 class ProductAdmin(ModelView):
@@ -110,6 +127,9 @@ class ProductAdmin(ModelView):
         }
     }
 
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
+
 
 class CartAdmin(ModelView):
     """ Cart admin editor """
@@ -146,6 +166,9 @@ class CartAdmin(ModelView):
         }
     }
 
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
+
 
 class CartProductAdmin(ModelView):
     """ CartProduct admin editor """
@@ -178,6 +201,9 @@ class CartProductAdmin(ModelView):
             'disabled': True
         }
     }
+
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
 
 
 class OrderAdmin(ModelView):
@@ -244,6 +270,9 @@ class OrderAdmin(ModelView):
         }
     }
 
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
+
 
 class CategoryFeatureAdmin(ModelView):
     """ CategoryFeature admin """
@@ -262,6 +291,9 @@ class CategoryFeatureAdmin(ModelView):
             'validators': [DataRequired()]
         }
     }
+
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
 
 
 class ProductFeatureAdmin(ModelView):
@@ -286,6 +318,9 @@ class ProductFeatureAdmin(ModelView):
             'validators': [DataRequired()]
         }
     }
+
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
 
 
 class TestimonialAdmin(ModelView):
@@ -315,6 +350,9 @@ class TestimonialAdmin(ModelView):
             'disabled': True
         }
     }
+
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
 
 
 admin.add_view(UserAdmin(User, db.session, name='Users'))

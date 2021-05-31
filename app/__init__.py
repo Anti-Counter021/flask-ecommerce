@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView, expose
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_mail import Mail
@@ -21,6 +21,13 @@ login.login_view = 'auth.login'
 mail = Mail()
 
 
+class IndexAdmin(AdminIndexView):
+    """ Index admin page """
+    @expose('/')
+    def index(self):
+        return self.render('admin/index.html')
+
+
 def create_app(config_class=Config):
     """ Create app """
     app = Flask(__name__)
@@ -29,11 +36,14 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
-    admin.init_app(app)
+    admin.init_app(app, index_view=IndexAdmin())
     bootstrap.init_app(app)
     mail.init_app(app)
 
     from app import admin_routes
+
+    from app.errors import bp as errors_bp
+    app.register_blueprint(errors_bp)
 
     from app.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')

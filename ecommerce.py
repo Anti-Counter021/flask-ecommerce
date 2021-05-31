@@ -1,4 +1,5 @@
 from app import create_app, db
+from app.cli import register
 from app.cart_search import get_cart
 from app.models import (
     Category,
@@ -13,6 +14,7 @@ from app.models import (
 )
 
 app = create_app()
+register(app)
 
 
 @app.context_processor

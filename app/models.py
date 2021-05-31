@@ -108,6 +108,7 @@ class User(UserMixin, db.Model):
     cart_id = db.relationship('Cart', backref='owner', lazy='dynamic')
     order = db.relationship('Order', backref='user', lazy='dynamic')
     testimonial = db.relationship('Testimonial', backref='user', lazy='dynamic')
+    permission = db.Column(db.String(10), default='user')
 
     def __init__(self, username, email):
         self.username = username
