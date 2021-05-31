@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="text-center mt-3">API</h1>
     <div class="row text-center">
+        <h1 class="mt-3">API</h1>
         <div class="col"><a href="{{ url_for('api.get_categories') }}">Categories</a></div>
         <div class="col"><a href="{{ url_for('api.get_all_products') }}">Products</a></div>
+        <div class="col"><a href="{{ url_for('api.get_testimonials') }}">Testimonials</a></div>
     </div>
 
     <p></p><p></p><p></p>
@@ -25,12 +26,23 @@
     {% endfor %}
 
     <p></p><p></p><p></p>
-    <div class="row pb-5 mb-5">
-        <h1 class="text-center">Products</h1>
+    <div class="row">
+        <h1 class="text-center mb-3">Products</h1>
         {% for product in products %}
             <div class="col text-center">
                 <a href="{{ url_for('api.get_product', slug=product.slug, category_slug=product.category.slug) }}">{{ product.title }}</a>
             </div>
         {% endfor %}
     </div>
+
+    <p></p><p></p><p></p>
+    <div class="row text-center pb-5 mb-5">
+        <h1>Testimonials</h1>
+        {% for testimonial in testimonials %}
+            <div class="col">
+                <a href="{{ url_for('api.get_testimonial', id=testimonial.id) }}">{{ testimonial.user.username }} - {{ testimonial.appraisal }}</a>
+            </div>
+        {% endfor %}
+    </div>
+
 {% endblock %}

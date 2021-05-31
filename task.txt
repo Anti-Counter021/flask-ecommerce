@@ -1,3 +1,1 @@
-Попробовать добавить загрузку изображений на админку
-
-errors, superuser, admin
+errors, superuser

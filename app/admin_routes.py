@@ -9,6 +9,7 @@ from app.models import Product, Category, User, CartProduct, Cart, Order, Catego
 
 
 def date_format(view, value):
+    """ Date format """
     if type(value) == date:
         return value.strftime('%d-%m-%Y')
     return value.strftime('%d-%m-%Y %H:%M:%S')

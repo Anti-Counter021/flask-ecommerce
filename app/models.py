@@ -209,7 +209,7 @@ class ProductFeature(db.Model):
         return f'{self.feature.feature_name} {self.value} {self.feature.unit} - {self.product}'
 
 
-class Testimonial(db.Model):
+class Testimonial(PaginatedAPIMixin, db.Model):
     """ Testimonial """
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
@@ -219,6 +219,19 @@ class Testimonial(db.Model):
 
     def __repr__(self):
         return f'ID: {self.id} - {self.user}'
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'user': self.user.username,
+            'appraisal': self.appraisal,
+            'comment': self.comment,
+            'created_at': self.created_at,
+            '_links': {
+                'self': url_for('api.get_testimonial', id=self.id)
+            }
+        }
+        return data
 
 
 @login.user_loader
