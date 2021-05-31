@@ -55,7 +55,12 @@
                                             <tbody>
                                                 {% for item in order.cart.products.all() %}
                                                     <tr>
-                                                        <th scope="row">{{ item.product.title }}</th>
+                                                        <th scope="row">
+                                                            {{ item.product.title }}
+                                                            {% if item.product.delivery_product_terminated %}
+                                                                <p class="mt-2"><span class="text-danger">Delivery terminated</span></p>
+                                                            {% endif %}
+                                                        </th>
                                                         <td class="w-25">
                                                             {% if item.product.image_path %}
                                                                 <img src="{{ url_for('main.uploaded_image', slug=item.product.slug) }}" class="img-thumbnail" alt="..."/>

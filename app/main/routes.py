@@ -1,6 +1,6 @@
 from datetime import date
 
-from flask import render_template, redirect, url_for, request, flash, current_app, send_from_directory
+from flask import render_template, redirect, url_for, request, flash, current_app, send_from_directory, abort
 from flask_login import current_user, login_required
 
 import os
@@ -16,7 +16,7 @@ from app.main.send_mail import send_admin_about_order
 @bp.route('/')
 def index():
     """ Home """
-    products = Product.query.all()
+    products = Product.query.filter_by(delivery_product_terminated=False)
     return render_template('base.html', products=products, header=1)
 
 
@@ -44,7 +44,9 @@ def cart():
 @login_required
 def add_to_cart(slug):
     """ Add to cart """
-    product = Product.query.filter_by(slug=slug).first()
+    product = Product.query.filter_by(slug=slug, delivery_product_terminated=False).first()
+    if not product:
+        abort(404)
     cart = get_cart()
     cart_product = CartProduct.query.filter_by(user=current_user, cart=cart, product=product).first()
     if not cart_product:

@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1 class="text-center mb-4">Category - {{ category.name }}</h1>
-    {% for product in category.products.all() %}
+    {% for product in category.products.filter_by(delivery_product_terminated=False) %}
         {% include '_product.html' %}
     {% endfor %}
 {% endblock %}

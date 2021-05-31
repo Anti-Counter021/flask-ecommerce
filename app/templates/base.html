@@ -38,7 +38,7 @@
                                     {% if category.products.count() %}
                                         <li><a class="dropdown-item" href="{{ url_for('main.category_detail', slug=category.slug) }}">
                                             {{ category.name }}
-                                            <span class="badge rounded-pill bg-secondary">{{ category.products.count() }}</span>
+                                            <span class="badge rounded-pill bg-secondary">{{ category.products.filter_by(delivery_product_terminated=False).count() }}</span>
                                         </a></li>
                                     {% endif %}
                                 {% endfor %}

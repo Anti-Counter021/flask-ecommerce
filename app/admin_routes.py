@@ -76,15 +76,16 @@ class ProductAdmin(ModelView):
     """ Product admin editor """
     can_delete = False
     edit_template = 'admin/edit_product.html'
-    column_list = ('id', 'category.name', 'title', 'slug', 'price')
-    column_sortable_list = ('id', 'title', 'slug', 'price', 'category.name')
+    column_list = ('id', 'category.name', 'title', 'slug', 'price', 'delivery_product_terminated')
+    column_sortable_list = ('id', 'title', 'slug', 'price', 'category.name', 'delivery_product_terminated')
     column_searchable_list = ('title', 'description', 'slug', 'price', 'category.name')
     column_labels = {
         'category.name': 'Category',
         'feature_id': 'Features',
         'image_path': 'Image'
     }
-    form_columns = ('title', 'slug', 'category', 'description', 'price', 'image_path', 'feature_id')
+    form_columns = ('title', 'slug', 'category', 'description', 'price',
+                    'delivery_product_terminated', 'image_path', 'feature_id')
     form_args = {
         'title': {
             'validators': [DataRequired()]

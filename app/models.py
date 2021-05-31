@@ -73,6 +73,7 @@ class Product(PaginatedAPIMixin, db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     cart_product_id = db.relationship('CartProduct', backref='product', lazy='dynamic')
     feature_id = db.relationship('ProductFeature', backref='product', lazy='dynamic')
+    delivery_product_terminated = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
         data = {
@@ -83,6 +84,7 @@ class Product(PaginatedAPIMixin, db.Model):
             'price': self.price,
             'image': self.image_path,
             'category': self.category.name,
+            'delivery_product_terminated': self.delivery_product_terminated,
             'features_count': self.feature_id.count(),
             'features': [{'name': item.feature.feature_name, 'value': item.value, 'unit': item.feature.unit} for item in self.feature_id],
             '_links': {

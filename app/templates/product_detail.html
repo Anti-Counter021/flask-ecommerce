@@ -9,14 +9,17 @@
                     <img src="{{ url_for('main.uploaded_image', slug=product.slug) }}" class="img-fluid" alt="..."/>
                 {% else %}
                     <img class="img-fluid mb-5" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
-                    {% include 'upload_image.html' %}
                 {% endif %}
             </div>
             <div class="col-md-6">
                 <p>Description:</p>
                 <p>{{ product.description }}</p>
                 <p>Price: <strong>{{ product.price }}</strong> $</p>
-                <p class="text-center"><a href="{{ url_for('main.add_to_cart', slug=product.slug) }}"><button class="btn btn-primary">Add to cart</button></a></p>
+                {% if not product.delivery_product_terminated %}
+                    <p class="text-center"><a href="{{ url_for('main.add_to_cart', slug=product.slug) }}"><button class="btn btn-primary">Add to cart</button></a></p>
+                {% else %}
+                    <p class="text-center"><span class="text-danger">Delivery product terminated</span></p>
+                {% endif %}
             </div>
         </div>
     </div>
