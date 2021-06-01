@@ -25,7 +25,10 @@ Installing { (text) - instruction }:
 #Docker
 
 Run:
-    
+
+    update in the Dockerfile WORKDIR to the directory with the repository 
+                (full path from the root of the disk)
+
     create directory "media" !!!
     create file boot.sh with:
 
@@ -44,3 +47,15 @@ Run:
     docker build -t ecommerce:latest .
     
     docker run --name ecommerce -d -p 8000:5000 --rm ecommerce:latest
+
+    All running containers:
+        docker ps -a
+    
+    Stop running container:
+        docker stop <container id>
+
+    All container images:
+        docker images
+
+    Delete all containers:
+        docker system prune -a
