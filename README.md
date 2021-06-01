@@ -22,7 +22,7 @@ Installing { (text) - instruction }:
     flask createsuperuser username_password_email (create superuser)
     flask run
 
-#Docker
+# Docker
 
 Run:
 
