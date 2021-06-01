@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_admin import Admin, AdminIndexView, expose
 from flask_bootstrap import Bootstrap
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -26,6 +26,9 @@ class IndexAdmin(AdminIndexView):
     @expose('/')
     def index(self):
         return self.render('admin/index.html')
+
+    def is_accessible(self):
+        return True if current_user.is_authenticated and current_user.permission == 'admin' else False
 
 
 def create_app(config_class=Config):
