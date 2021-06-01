@@ -141,5 +141,6 @@ def testimonials():
         db.session.commit()
         flash('Your testimonial has been created.')
         return redirect(url_for('main.testimonials'))
-    testimonials_ = Testimonial.query.all()
+    elif request.method == 'GET':
+        testimonials_ = Testimonial.query.all()
     return render_template('testimonial.html', title='Testimonials', form=form, testimonials=testimonials_)
